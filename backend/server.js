@@ -14,18 +14,15 @@ app.use(express.json())
 app.get('/', (req, res) => res.send('API Server is running'))
 
 // Auth routes
-app.use('/api/auth', authRoutes)
-
+// app.use('/api/auth', authRoutes)
+const { poolPromise } = require('./utils/db');
 // Ensure DB connection and create users table if not exists
-;(async () => {
+(async () => {
   try {
-    await db.init() // will create table if needed
-    console.log('Database ready')
-    app.listen(port, '0.0.0.0', () => {
-      console.log(`Server listening on port ${port}`)
-    })
+    const pool = await poolPromise;
+    console.log('Database connected!');
+    // เริ่ม server ของคุณต่อที่นี่
   } catch (err) {
-    console.error('Failed to initialize DB', err)
-    process.exit(1)
+    console.error('Failed to initialize DB', err);
   }
-})()
+})();
