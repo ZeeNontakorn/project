@@ -15,14 +15,13 @@ app.get('/', (req, res) => res.send('API Server is running'))
 
 // Auth routes
 // app.use('/api/auth', authRoutes)
-const { poolPromise } = require('./utils/db');
-// Ensure DB connection and create users table if not exists
+const pool = require('./utils/db');
+
 (async () => {
   try {
-    const pool = await poolPromise;
-    console.log('Database connected!');
-    // เริ่ม server ของคุณต่อที่นี่
+    const res = await pool.query('SELECT NOW()');
+    console.log('DB connected:', res.rows);
   } catch (err) {
-    console.error('Failed to initialize DB', err);
+    console.error('DB connection failed:', err);
   }
 })();
